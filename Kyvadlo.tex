@@ -1,0 +1,395 @@
+\documentclass[reqno, a4paper]{amsart}
+\author{J. Hořák, J. Púček, L. Košárková, M. Fuksa}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage[scale=0.9]{geometry}
+\usepackage{mathbbol}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{multicol}
+
+\input{vit-prusa-macros-experimental}
+\input{pendulum-macros}
+
+\title{Matematické kyvadlo}
+
+\begin{document}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+\addtocontents{toc}{\protect\begin{multicols}{2}}
+\tableofcontents
+
+\section{Úvod}
+\label{sec:Úvod}
+
+V tomto dokukmentu budeme zkoumat pohyb matematického kyvadla. Jehož dynamický systém je ukázkovým příkladem systému s periodickým pohybem. Z matematického hlediska, je cílem tohoto tutoriálu:
+\begin{itemize}
+\item prohloubit vaše znalosti o dynamice plynoucí z obyčejné diferenciální rovnice druhého řádu,
+\item ukázat, že lze získat určitou kvantitativní informaci o dynamice systému, bez toho aniž by jsme explicitně řešily jeho diferenciální rovnici.
+\end{itemize}
+
+\section{Fyzikální kontext}
+\label{sec:Fyzikální kontext}
+Kyvadlo o kterém budeme pojednávat je definováno obrázkem ~\ref{fig:pendulum-intro}. Délka závěsu kyvadla je $l$ a kyvadlo se hýbe v homogenním gravitačním poli s gravitačním zrychlením $g$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.3\textwidth]{pendulum-intro}
+\caption{Matematické kyvadlo.}  
+\label{fig:pendulum-intro}
+\end{figure}
+
+Existuje několik způsobů jak si diferenciální rovnici pro pohyb kyvadla odvodit, ale tím se zde zabývat nebudeme. Rovnice pro popis pohybu kyvadla zní následovně:
+\begin{equation}
+  \label{eq:4}
+  \ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0.
+\end{equation}
+Problém s rovnicí ~\eqref{eq:4} je, že se jedná o rovnici \emph{nelineární}. Pro nelineární rovnice je velmi obtížné najít explicitní řešení, vyjádřené pomocí elementárních funkcí.
+
+Ve speciálním případě malých kmitů, když $\theta$ je dostatečně malá ve všech časech, můžeme použít následující aproximaci pro malé úhly $\sin \theta \approx \theta$ a převést naši nelineární rovnici ~\eqref{eq:4} na rovnici lineární:
+\begin{equation}
+  \label{eq:1}
+  \ddd{\theta}{t} + \frac{g}{l} \theta = 0.
+\end{equation}
+Hlavní otázkou je, zdali \emph{dynamika} zlinearizovaného systému je vůbec podobná dynamice nelineárního systému.Ukazuje se, že určité porozumnění dynamice plynoucí z rovnice ~\eqref{eq:4} lze získat studováním aproximace ~\eqref{eq:1} či studováním lepších aproximací stejného typu.
+
+\section{Perioda kmitů}
+\label{sec:Perioda kmitů}
+Since we do not have an explicit formula for the solution, it seems that it is impossible to find a formula for the period of oscillations~$T$. It however turns out that the period of oscillations can be found without solving the governing equations. The period of oscillations as predicted by the linearised governing equation~\eqref{eq:1} is
+\begin{equation}
+  \label{eq:2}
+  T
+  =
+  2\pi
+  \sqrt{
+    \frac{l}{g}
+  }
+  .
+\end{equation}
+Regarding the pendulum governed by the nonlinear equation~\eqref{eq:4}, we can conjecture that the period of oscillations of the pendulum  that is released with zero velocity from the initial position given by the angle $\thetainit$ is 
+\begin{equation}
+  \label{eq:3}
+  T
+  =
+  2\pi
+  \sqrt{
+    \frac{l}{g}
+  }
+  \left(
+    1
+    +
+    a \thetainit^2
+    +
+    b \thetainit^4
+    +
+    \cdots
+  \right)
+  ,
+\end{equation}
+where $a$, $b \in R$ are real constants. (In virtue of the symmetry of the problem we know that there are no odd terms in the expansion.) We now derive an exact formula for the period of oscillations, and we find the value of the coefficient $a$ in the expansion~(\ref{eq:3}).
+
+\subsection{Direct computation via approximation of elliptic integral}
+\label{sec:direct-comp-via}
+
+
+The multiplication of~\eqref{eq:4} by $\dd{\theta}{t}$ yields
+\begin{equation}
+  \label{eq:5}
+  \dd{}{t}
+  \left(
+    \frac{1}{2}
+    \left(
+      \dd{\theta}{t}
+    \right)^2
+    -
+    \frac{g}{l}
+    \cos \theta
+  \right)
+  =
+  0
+  .
+\end{equation}
+(This equation is the conservation of energy.) Equation~\eqref{eq:5} implies that
+\begin{equation}
+  \label{eq:6}
+  \left(
+    \dd{\theta}{t}
+  \right)^2
+  =
+  \frac{2g}{l}
+  \cos \theta
+  +
+  C
+  ,
+\end{equation}
+where $C$ is an integration constant. The value of the constant is fixed by the initial condition. If $\theta = \thetainit$ we want the pendulum to have the zero angular velocity $\left. \dd{\theta}{t} \right|_{\theta = \thetainit}= 0$, hence we get
+\begin{equation}
+  \label{eq:7}
+  \dd{\theta}{t}
+  =
+  \sqrt{
+    \frac{2g}{l}
+  }
+  \sqrt{\cos \theta - \cos \thetainit}.
+\end{equation}
+(Let us assume that we investigate the motion of the pendulum in the time interval where $\dd{\theta}{t} \geq 0$.) Note that~\eqref{eq:7} or for that matter even~\eqref{eq:6} imply that the velocity $\dd{\theta}{t}$ remains bounded for all times! This is an important qualitative feature and we will exploit it later.
+
+
+Now we use the theorem on the derivative of inverse functions, and we arrive at
+\begin{equation}
+  \label{eq:8}
+  \dd{t}{\theta}
+  =
+  \frac{1}
+  {
+    \sqrt{
+      \frac{2g}{l}
+    }
+    \sqrt{\cos \theta - \cos \thetainit}
+  }
+  .
+\end{equation}
+This is a differential equation for the time expressed as a function of the angle. We solve this equation by separation of variables,
+\begin{equation}
+  \label{eq:9}
+  \diff t  
+  =
+  \frac{\diff \theta}
+  {
+    \sqrt{
+      \frac{2g}{l}
+    }
+    \sqrt{\cos \theta - \cos \thetainit}
+  }
+  .
+\end{equation}
+If we integrate the equation from $\theta=0$ to $\theta=\thetainit$, then on the left-hand side we get $\frac{T}{4}$. (One quarter of period is necessary to move from the vertical position $\theta=0$ to the extreme position $\theta=\thetainit$.) Consequently, the formula for the period of oscillation reads
+\begin{equation}
+  \label{eq:10}
+  \frac{T}{4}
+  =
+  \int_{\theta=0}^{\thetainit}
+  \frac{\diff \theta}
+  {
+    \sqrt{
+      \frac{2g}{l}
+    }
+    \sqrt{\cos \theta - \cos \thetainit}
+  }
+  .
+\end{equation}
+
+The integral on the right-hand side is difficult to evaluate in the sense that we have no simple explicit formula for the integral. However, if our objective is to derive an asymptotic expansion for the period of oscillations, we can try to approximate the integral as well.
+
+Before we manipulate the integral we rewrite it in a more convenient form. One of the objectives is to eliminate the annoying singularity in the integrand. We recall the trigonometric identity $\sin^2 \frac{\alpha}{2} = \frac{1 - \cos \alpha}{2}$, and we use it in the integrand
+\begin{equation}
+  \label{eq:14}
+  T
+  =
+  2
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\theta=0}^{\thetainit}
+  \frac{\diff \theta}
+  {
+    \sqrt{\sin^2 \frac{\thetainit}{2} - \sin^2 \frac{\theta}{2}}
+  }
+  .
+\end{equation}
+The integrand has now the structure $\frac{1}{\sqrt{1 - y^2}}$, and we know that if we want to calculate $\int \frac{\diff y}{\sqrt{1 - y^2}}$, then the good substitution is $y = \sin \varphi$. Motivated by this observation we manipulate the integral as follows
+\begin{equation}
+  \label{eq:15}
+  \renewcommand\arraystretch{2} % for nice typesetting of the substitution
+  T
+  =
+  2
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\theta=0}^{\thetainit}
+  \frac{\diff \theta}
+  {
+    \sqrt{\sin^2 \frac{\thetainit}{2} - \sin^2 \frac{\theta}{2}}
+  }
+  =
+  \begin{vmatrix}
+    \sin \varphi = \frac{\sin \frac{\theta}{2}}{\sin \frac{\thetainit}{2}} \\
+    \cos \varphi  \, \diff \varphi = \frac{1}{2} \frac{\cos \frac{\theta}{2}}{\sin \frac{\thetainit}{2}}  \, \diff \theta \\
+    \sqrt{1 - \frac{\sin^2 \frac{\theta}{2}}{\sin^2 \frac{\thetainit}{2}}} \diff \varphi = \frac{1}{2} \frac{\sqrt{1 - \sin^2 \frac{\theta}{2}}}{\sin \frac{\thetainit}{2}}
+    \diff \theta \\
+    \sqrt{\sin^2 \frac{\thetainit}{2} - \sin^2 \frac{\theta}{2}} \diff \varphi
+    =
+    \frac{1}{2} \sqrt{1 - \sin^2 \frac{\thetainit}{2} \sin^2 \frac{\varphi}{2}}
+    \diff \theta
+  \end{vmatrix}
+  =
+  4
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\varphi=0}^{\frac{\pi}{2}}
+  \frac{\diff \varphi}
+  {
+    \sqrt{1 - k^2 \sin^2 \varphi}
+  }
+  ,
+\end{equation}
+where we have denoted $k =_{\bydefinition} \sin \frac{\thetainit}{2}$. The integral on the right-hand side looks much better than the original integral. In particular the integrand is now well defined for all $\varphi \in \left[0, \frac{\pi}{2} \right]$ 
+
+Let us summarise our findings so far. The formula for the period of oscillations is
+\begin{subequations}
+  \label{eq:16}
+  \begin{equation}
+    \label{eq:17}
+    T
+    =
+    4
+    \sqrt{
+      \frac{l}{g}
+    }
+    \int_{\varphi=0}^{\frac{\pi}{2}}
+    \frac{\diff \varphi}
+    {
+      \sqrt{1 - k^2 \sin^2 \varphi}
+    }
+    ,
+  \end{equation}
+  where
+  \begin{equation}
+    \label{eq:18}
+    k =_{\bydefinition} \sin \frac{\thetainit}{2}.
+  \end{equation}
+\end{subequations}
+The integral in~\eqref{eq:17} is referred to as the \emph{elliptic integral}. The elliptic integral can be completely evaluated for all $k$ using a series expansion, see, for example. We however need something less complicated. Using the Taylor expansion for small $\thetainit$, and consequently for small $k$, we see that
+\begin{equation}
+  \label{eq:19}
+  \frac{1}
+  {
+    \sqrt{1 - k^2 \sin^2 \varphi}
+  }
+  \approx
+  1
+  +
+  \frac{1}{2}
+  k^2
+  \sin^2 \varphi
+  \approx
+  1
+  +
+  \frac{1}{8}
+  \thetainit^2
+  \sin^2 \varphi
+  ,
+\end{equation}
+where we have used the fact that $\sin \alpha \approx \alpha$ and $\frac{1}{\sqrt{1-y}} \approx 1 + \frac{1}{2}y$. Making use of the expansion~\eqref{eq:19} in~\eqref{eq:17} we arrive at
+\begin{equation}
+  \label{eq:20}
+  T
+  =
+  4
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\varphi=0}^{\frac{\pi}{2}}
+  \frac{\diff \varphi}
+  {
+    \sqrt{1 - k^2 \sin^2 \varphi}
+  }
+  \approx
+  4
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\varphi=0}^{\frac{\pi}{2}}
+  \left(
+    1
+    +
+    \frac{1}{8}
+    \thetainit^2
+    \sin^2 \varphi
+  \right)
+  \diff \varphi
+  =
+  2\pi
+  \sqrt{\frac{l}{g}}
+  \left(
+    1
+    +
+    \frac{\thetainit^2}{16}
+  \right)
+  .
+\end{equation}
+\\
+\section{Numerický výpočet}
+Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Proto se nyní budeme zabývat numerickým řešením v programu Wolfram Mathematica (příkaz NDSolve), kde existuje několik numerických metod na výpočet řešení diferenciálních rovnic.
+\subsection{Explicitní Eulerova metoda}
+Explicitní Eulerova metoda je jedna z jednodušších, avšak také jedna z nejméně spolehlivých.
+\\
+\textit{Princip explicitní Eulerovy metody:} Mějme diferenciální rovnici $\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$ s počátečními podmínkami v čase $t_{0}=0$: $\theta(t_{0})=\thetainit,\; \dd{\theta}{t}(t_{0})=0$. Pak řešení v čase $t_{i}=i\Delta t,\; i=1,...,n$ (zde ve vysvětlení principu pro zjednodušení předpokládejme rovnoměrné dělení a tedy $ \Delta t$ je časový krok metody) získáme ze soustavy rovnic: 
+\begin{align}
+	\theta_{i+1}& =\theta_{i}+v_{i}\Delta t\\
+	v_{i+1}& =v_{i}-\frac{g}{l}\sin\theta_{i}\Delta t
+\end{align}
+, kde $ v_{i}=\dd{\theta_{i}}{t},\; \theta_{i}=\theta(t_{i}),\;\theta_{i+1}=\theta(t_{i+1}),\;v_{i}=v(t_{i}),\;v_{i+1}=v(t_{i+1})$
+\\
+\\
+\textit{Výpočet periody:} Nejdříve zkoumejme periodu T, kterou získáme jako dobu, za kterou se dostane kyvadlo z úhlu $\thetainit$ (počáteční výchylky) do úhlu $\theta=0$. Vykresleme si graf, který ukazuje závislost periody na počáteční výchylce pro různé metody výpočtu.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{graf1}
+	\caption{Závislost T na $\thetainit$}  
+\end{figure}
+\\
+V tomto případě jsou data získaná explicitní Eulerovou metodou velmi podobná jako výsledky řešení periody pomocí eliptického integrálu. To je dáno tím, že numerické řešení pomocí explicitní Eulerovy metody se s přesných řešením rozbíhá až pro vyšší časy. Výsledky analytické aproximace z rovnice ~\eqref{eq:20} už se ale velmi liší.
+\\
+\\
+Na následujícím grafu je vykreslené řešení pomocí explixitní Eulerovy metody, které se zvyšujícím se časem začíná předbíhat řešení pomocí automatické metody příkazu NDSolve. Lze také vidět, že u řešení explicitní Eulerovou metodou se zvětšuje výchylka, což je příčinou toho, že tato metoda nezachovává celkovou energii systému.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.82\textwidth]{vs}
+	\caption{explixitní Euler vs automatická metoda v NDSolve}  
+\end{figure}
+\\
+\\
+První integrál rovnice ~\eqref{eq:4} je ve tvaru
+\begin{equation}
+	\frac{1}{2}
+	\left(
+	\dd{\theta}{t}
+	\right)^2
+	-
+	\frac{g}{l}
+	\cos \theta
+	=
+	E
+	.
+\end{equation}
+Neboli podél řešení rovnice ~\eqref{eq:4} musí být první interál roven konstantě E, což je celková mechanická energie systému.
+Pro explicitní Eulerovu metodu to ovšem neplatí. Například pro $\thetainit =2\pi/3$ by mělo být podél celého řešení $E=4.905$, ale Eulerova metoda dává pro zvyšující se čas větší hodnoty E:
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.72\textwidth]{energie}
+	\caption{Eulerova metoda a energie}  
+\end{figure}
+\\
+\\
+Nezachovávání energie explicitní Eulerovou metoděou si můžeme znázornit i trajektorií ve vektorovém poli ${\left\lbrace \theta[t],\dd{\theta}{t}[t]\right\rbrace }$. Na levém obrázku je výpočet pro $\thetainit=\pi/2$, kde se v Eulerově metodě automaticky používá minimální velikost počátečního kroku. Během každé periody (což odpovídá jednomu oběhu na obrázku) se energie pomalu zvyšuje a na obrázku se tak po několika periodách křivka zhušťuje. Abychom to viděli zřetelněji, volme Eulerovu metodu opět s $\thetainit=\pi/2$, ale nyní s námi zvolenou hodnotou počátečnío kroku např. $ StartingStepSize -> 1/99 $, tím se zvýší nepřesnost, systém začne nabírat energii rychleji a výchylka se začne patrně zvětšovat (pravý obrázek).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.72\textwidth]{pole1}
+	\caption{\textit{Nalevo:} automaticky zabudovaná Eulerova metoda}  \textit{Napravo:} Eulerova metoda s $StartingStepSize -> 1/99$  
+\end{figure}
+
+
+\addtocontents{toc}{\protect\end{multicols}}
+\end{document}
