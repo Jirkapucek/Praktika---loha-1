@@ -1,0 +1,519 @@
+\documentclass[reqno, a4paper]{amsart}
+\author{J. Púček, L. Košárková, M. Fuksa}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage[scale=0.9]{geometry}
+\usepackage{mathbbol}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{graphicx,wrapfig}
+
+\input{vit-prusa-macros-experimental}
+\input{pendulum-macros}
+
+\title{Matematické kyvadlo}
+
+\begin{document}
+
+\begin{abstract}
+	Zkoumáme řešení rovnici matematického kyvadla pomocí explicitní Eulerovy metody, Runge-Kuttovy motedy a
+\end{abstract}
+
+\maketitle
+
+\addtocontents{toc}{\protect\begin{multicols}{2}}
+\tableofcontents
+
+\section{Úvod}
+\label{sec:Úvod}
+
+V tomto dokukmentu budeme zkoumat pohyb matematického kyvadla. Jehož dynamický systém je ukázkovým příkladem systému s periodickým pohybem. Hlavním předmětem zkoumání je, jak se mění chování numerického řešení vůči aproximaci analytického řešení za použití různých numerických metod.
+
+\section{Fyzikální kontext}
+\label{sec:Fyzikální kontext}
+Kyvadlo o kterém budeme pojednávat je definováno jako na obrázku. Délka závěsu kyvadla je $l$ a kyvadlo se hýbe v homogenním gravitačním poli s gravitačním zrychlením $g$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.3\textwidth]{pendulum-intro}
+\caption*{Matematické kyvadlo.}  
+\label{fig:pendulum-intro}
+\end{figure}
+
+Rovnice pro popis pohybu kyvadla vypadá následovně:
+\begin{equation}
+  \label{eq:4}
+  \ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0.
+\end{equation}
+Problém s rovnicí ~\eqref{eq:4} je, že se jedná o rovnici \emph{nelineární}. Pro nelineární rovnice je velmi obtížné najít explicitní řešení, vyjádřené pomocí elementárních funkcí.
+
+Ve speciálním případě malých kmitů, když $\theta$ je dostatečně malá ve všech časech, můžeme použít následující aproximaci pro malé úhly $\sin \theta \approx \theta$ a převést naši nelineární rovnici ~\eqref{eq:4} na rovnici lineární:
+\begin{equation}
+  \label{eq:1}
+  \ddd{\theta}{t} + \frac{g}{l} \theta = 0.
+\end{equation}
+Hlavní otázkou je, zdali \emph{dynamika} zlinearizovaného systému je vůbec podobná dynamice nelineárního systému.Ukazuje se, že určité porozumnění dynamice plynoucí z rovnice ~\eqref{eq:4} lze získat studováním aproximace ~\eqref{eq:1} či studováním lepších aproximací stejného typu.
+
+\section{Perioda kmitů}
+\label{sec:Perioda kmitů}
+Jelikož neznáme explicitní vyjádření řešení diferenciální rovnice, tak to vypadá, že nelze nalázt funkci periody oscilace~$T$. Ukazuje se ovšem, že nemusíme vyřešit rovnici, abychom nalezli periodu oscilací. Perioda oscilace pro linearizovaný systém~\eqref{eq:1} je
+\begin{equation}
+  \label{eq:2}
+  T
+  =
+  2\pi
+  \sqrt{
+    \frac{l}{g}
+  }
+  .
+\end{equation}
+Díky linearizaci se dá předpokládat, že perioda oscilace kyvadla vypuštěného s nulovou rychlostí z počáteční pozice danou počátečním úhlem $\theta_{0}$ je 
+\begin{equation}
+  \label{eq:3}
+  T
+  =
+  2\pi
+  \sqrt{
+    \frac{l}{g}
+  }
+  \left(
+    1
+    +
+    a \theta_{0}^2
+    +
+    b \theta_{0}^4
+    +
+    \cdots
+  \right)
+  ,
+\end{equation}
+kde $a$, $b \in R$ jsou reálné konstanty a navíc díky symetrii problému řada nemá liché členy.
+
+\subsection{Přímý výpočet pomocí aproximace eliptického integrálu}
+\label{Přímý výpočet pomocí aproximace eliptického integrálu}
+
+
+Vynásobením rovnice~\eqref{eq:4} členem $\dd{\theta}{t}$ a následnou úpravou dostáváme
+\begin{equation}
+  \label{eq:5}
+  \dd{}{t}
+  \left(
+    \frac{1}{2}
+    \left(
+      \dd{\theta}{t}
+    \right)^2
+    -
+    \frac{g}{l}
+    \cos \theta
+  \right)
+  =
+  0
+  .
+\end{equation}
+Rovnice~\eqref{eq:5} navíc implikuje
+\begin{equation}
+  \label{eq:6}
+  \left(
+    \dd{\theta}{t}
+  \right)^2
+  =
+  \frac{2g}{l}
+  \cos \theta
+  +
+  C
+  ,
+\end{equation}
+kde $C$ je integrační konstanta, která je pevně dána počáteční podmínkou. Když $\theta = \theta_{0}$, tak chceme aby kyvadlo mělo nulovou úhlovou rychlost$\left. \dd{\theta}{t} \right|_{\theta = \theta_{0}}= 0$ a tím dostáváme
+\begin{equation}
+  \label{eq:7}
+  \dd{\theta}{t}
+  =
+  \sqrt{
+    \frac{2g}{l}
+  }
+  \sqrt{\cos \theta - \cos \theta_{0}}.
+\end{equation}
+(předpokládejme, že $\dd{\theta}{t} \geq 0$.) Všimněme si, že~\eqref{eq:7} implikuje, že rychlost$\dd{\theta}{t}$ zůstává omezená po celou dobu. Nyní využijme větu o derivaci inverzní fuhkce a tím získáváme
+\begin{equation}
+  \label{eq:8}
+  \dd{t}{\theta}
+  =
+  \frac{1}
+  {
+    \sqrt{
+      \frac{2g}{l}
+    }
+    \sqrt{\cos \theta - \cos \theta_{0}}
+  }
+  .
+\end{equation}
+To jest diferenciální rovnice pro čas vyjádřený jako funkce úhlu. Tuto rovnici řešíme seperací proměnných.
+\begin{equation}
+  \label{eq:9}
+  \diff t  
+  =
+  \frac{\diff \theta}
+  {
+    \sqrt{
+      \frac{2g}{l}
+    }
+    \sqrt{\cos \theta - \cos \theta_{0}}
+  }
+  .
+\end{equation}
+Pokud zintegrujeme rovnici od $\theta=0$ do $\theta=\theta_{0}$, tak na levé straně dostáváme $\frac{T}{4}$. Potom vzorec pro periodu oscilace je ve tvaru
+\begin{equation}
+  \label{eq:10}
+  \frac{T}{4}
+  =
+  \int_{\theta=0}^{\theta_{0}}
+  \frac{\diff \theta}
+  {
+    \sqrt{
+      \frac{2g}{l}
+    }
+    \sqrt{\cos \theta - \cos \theta_{0}}
+  }
+  .
+\end{equation}
+
+Integrál na pravé straně nelze analyticky vypočítat, ale získat její aproximaci možné je. Přepišme si nejdřív integrál do uchopitelnější formy, kde využijeme, že platí známá rovnost $\sin^2 \frac{\alpha}{2} = \frac{1 - \cos \alpha}{2}$.
+\begin{equation}
+  \label{eq:14}
+  T
+  =
+  2
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\theta=0}^{\theta_{0}}
+  \frac{\diff \theta}
+  {
+    \sqrt{\sin^2 \frac{\theta_{0}}{2} - \sin^2 \frac{\theta}{2}}
+  }
+  .
+\end{equation}
+Integrand je nyní typu $\frac{1}{\sqrt{1 - y^2}}$ a dobrá substituce pro  $\int \frac{\diff y}{\sqrt{1 - y^2}}$ je $y = \sin \varphi$. Toho nyní využijme.
+\begin{equation}
+  \label{eq:15}
+  \renewcommand\arraystretch{2} % for nice typesetting of the substitution
+  T
+  =
+  2
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\theta=0}^{\theta_{0}}
+  \frac{\diff \theta}
+  {
+    \sqrt{\sin^2 \frac{\theta_{0}}{2} - \sin^2 \frac{\theta}{2}}
+  }
+  =
+  \begin{vmatrix}
+    \sin \varphi = \frac{\sin \frac{\theta}{2}}{\sin \frac{\theta_{0}}{2}} \\
+    \cos \varphi  \, \diff \varphi = \frac{1}{2} \frac{\cos \frac{\theta}{2}}{\sin \frac{\theta_{0}}{2}}  \, \diff \theta \\
+    \sqrt{1 - \frac{\sin^2 \frac{\theta}{2}}{\sin^2 \frac{\theta_{0}}{2}}} \diff \varphi = \frac{1}{2} \frac{\sqrt{1 - \sin^2 \frac{\theta}{2}}}{\sin \frac{\theta_{0}}{2}}
+    \diff \theta \\
+    \sqrt{\sin^2 \frac{\theta_{0}}{2} - \sin^2 \frac{\theta}{2}} \diff \varphi
+    =
+    \frac{1}{2} \sqrt{1 - \sin^2 \frac{\theta_{0}}{2} \sin^2 \frac{\varphi}{2}}
+    \diff \theta
+  \end{vmatrix}
+  =
+  4
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\varphi=0}^{\frac{\pi}{2}}
+  \frac{\diff \varphi}
+  {
+    \sqrt{1 - k^2 \sin^2 \varphi}
+  }
+  ,
+\end{equation}
+Kde jsme definovali $k =_{\bydefinition} \sin \frac{\theta_{0}}{2}$. Integrál je nyní ve tvaru \emph{eliptického integrálu}, který je definovaný pro všechny $\varphi \in \left[0, \frac{\pi}{2} \right]$ a tedy dostáváme
+\begin{subequations}
+  \label{eq:16}
+  \begin{equation}
+    \label{eq:17}
+    T
+    =
+    4
+    \sqrt{
+      \frac{l}{g}
+    }
+    \int_{\varphi=0}^{\frac{\pi}{2}}
+    \frac{\diff \varphi}
+    {
+      \sqrt{1 - k^2 \sin^2 \varphi}
+    }
+    ,
+  \end{equation}
+  kde
+  \begin{equation}
+    \label{eq:18}
+    k =_{\bydefinition} \sin \frac{\theta_{0}}{2}.
+  \end{equation}
+\end{subequations}
+Na integrant~\eqref{eq:17} použijeme nyní jen Taylorův rozvoj a dostáváme
+\begin{equation}
+  \label{eq:19}
+  \frac{1}
+  {
+    \sqrt{1 - k^2 \sin^2 \varphi}
+  }
+  \approx
+  1
+  +
+  \frac{1}{2}
+  k^2
+  \sin^2 \varphi
+  \approx
+  1
+  +
+  \frac{1}{8}
+  \theta_{0}^2
+  \sin^2 \varphi
+  ,
+\end{equation}
+a následnou integrací a využití vztahů~\eqref{eq:19} a~\eqref{eq:17} dostáváme
+\begin{equation}
+  \label{eq:20}
+  T
+  =
+  4
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\varphi=0}^{\frac{\pi}{2}}
+  \frac{\diff \varphi}
+  {
+    \sqrt{1 - k^2 \sin^2 \varphi}
+  }
+  \approx
+  4
+  \sqrt{
+    \frac{l}{g}
+  }
+  \int_{\varphi=0}^{\frac{\pi}{2}}
+  \left(
+    1
+    +
+    \frac{1}{8}
+    \theta_{0}^2
+    \sin^2 \varphi
+  \right)
+  \diff \varphi
+  =
+  2\pi
+  \sqrt{\frac{l}{g}}
+  \left(
+    1
+    +
+    \frac{\theta_{0}^2}{16}
+  \right)
+  .
+\end{equation}
+
+Případně můžeme využít na výpočet řady software (například $ Wolfram Mathematica $ nebo jiné). Konkrétně pro $ Wolfram Mathematica $ můžeme využít příkaz
+
+\begin{verbatim*}
+	
+	k=Sin[\[Theta]/2]
+	Series[1/(Sqrt[1-k^2*(Sin[x])^2]),{\[Theta],0,4}]
+	Integrate[4*Sqrt[l/g]*Series[1/(Sqrt[1-k^2*(Sin[x])^2]),{\[Theta],0,n}],{x,0,Pi/2}]
+	
+\end{verbatim*}
+
+Kde za $ n $ volíme, do jakého řádu chceme aproximovat. Například pro $ n=10 $ dostáváme
+
+\begin{equation*}
+  T
+  \approx
+ 2 \pi \sqrt{\frac{l}{g}} \bigg(  1 +\frac{1}{16}\theta_{0} ^2+\frac{11}{3072}\theta_{0} ^4+\frac{173}{737280} \theta_{0} ^6 +\frac{22931}{1321205760} \theta_{0} ^8 
++\frac{1319183}{951268147200} \theta_{0} ^{10} \bigg)
+\end{equation*}
+
+Do inetgrálu také můžeme dosadit konkrétní hodnoty a dostat dosti přesnou hodnotu periody v závislosti na čase. Výsledkem jsou diskrétní hodnoty periody, viz. tabulka (1), které jsme následně proložily polynomem (metoda nejmenších čtverců), viz. graf (2). 
+
+\vspace{5mm}
+
+\begin{minipage}{\textwidth}
+\begin{minipage}[b]{0.2\textwidth}
+\centering
+\begin{tabular}{|c|c|}
+\hline
+$\theta_{0}$ & T \\ 
+\hline
+0.001& 2.00607\\0.101& 2.00735\\0.201& 2.01114\\0.301& 2.01749\\0.401& 2.02642\\0.501& 2.038\\0.601& 2.05231\\0.701& 2.06947\\0.801& 2.08959\\0.901& 2.11284\\
+1.001& 2.13938\\1.101& 2.16945\\1.201& 2.20327\\1.301& 2.24115\\1.401& 2.28339\\1.501& 2.33039\\
+\hline
+\end{tabular}
+\captionof*{table}{(1)}
+\end{minipage}
+\begin{minipage}[b]{0.79\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{Elipticky integral, Perioda}
+\captionof*{figure}{(2)}
+\end{minipage}
+\hfill
+\end{minipage}
+
+\section{Numerický výpočet}
+Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Programy, jako například \textit{Wolfram Mathematica}, který zde budeme využívat, umožňují rychlé nalezení numerického řešení diferenciálních rovnic a to pomocí hned několika numerických metod s nastavitelnými parametry.\
+\\
+Stěžejní příkaz pro výpočet numerického řešení naší diferenciální rovnice ~\eqref{eq:4} v softwaru \textit{Wolfram Mathematica} bude:
+\begin{verbatim}
+NDSolve[{\[Theta]''[t] + (g/l)*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, 
+	\[Theta]'[0] == 0}, \[Theta], {t,0,n}]
+\end{verbatim}
+Přičemž po celý dokument budeme ve výpočtech uvažovat délku kyvadla $ l=1 $ a gravitační zrychlení $ g=9.81 $.
+
+\subsection{Explicitní Eulerova metoda}
+Explicitní Eulerova metoda je jedna z jednodušších, ale ukážeme si, že také jedna z nejméně spolehlivých.
+\\
+\subsubsection{Princip explicitní Eulerovy metody} Mějme diferenciální rovnici $\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$ s počátečními podmínkami v čase $t_{0}=0$: $\theta(t_{0})=\theta_{0},\; \dd{\theta}{t}(t_{0})=0$. Pak řešení v čase $t_{i}=i\Delta t,\; i=1,...,n$ (zde ve vysvětlení principu předpokládáme pro zjednodušení rovnoměrné dělení a tedy $ \Delta t$ je časový krok metody) získáme ze soustavy rovnic: 
+\begin{align}
+	\theta_{i+1}& =\theta_{i}+v_{i}\Delta t\\
+	v_{i+1}& =v_{i}-\frac{g}{l}\sin\theta_{i}\Delta t
+\end{align}
+
+, kde $ v_{i}=\dd{\theta_{i}}{t},\; \theta_{i}=\theta(t_{i}),\;\theta_{i+1}=\theta(t_{i+1}),\;v_{i}=v(t_{i}),\;v_{i+1}=v(t_{i+1})$
+\\
+\\
+\textit{Výpočet periody:} Nejdříve zkoumejme periodu T, kterou získáme jako 4krát dobu, za kterou se dostane kyvadlo z úhlu $\theta_{0}$ (počáteční výchylky) do úhlu $\theta=0$. 
+\\
+O takovýto výstup můžeme požádat \textit{Mathematicu} ve tvaru:  
+\begin{verbatim}
+NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0, 
+	WhenEvent[\[Theta][t] == 0, {Print[t*4], "StopIntegration"}]}, \[Theta], {t, 0, n }]
+\end{verbatim}
+Důležitá vlastností matematického kyvadla je závislost periody T na počáteční výchylce $\theta_{0}$
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{graf1}
+	\caption*{Závislost T na $\theta_{0}$}  
+\end{figure}
+\\
+V tomto případě jsou data získaná explicitní Eulerovou metodou velmi podobná jako výsledky řešení periody pomocí eliptického integrálu. To je dáno tím, že numerické řešení pomocí explicitní Eulerovy metody se s přesných řešením rozbíhá až pro vyšší časy. Výsledky analytické aproximace z rovnice ~\eqref{eq:20} už se ale velmi liší.
+\\
+\\
+Na následujícím grafu je vykreslené řešení pomocí explixitní Eulerovy metody, které se zvyšujícím se časem začíná předbíhat řešení pomocí automatické metody příkazu NDSolve. Lze také vidět, že u řešení explicitní Eulerovou metodou se zvětšuje výchylka, což je příčinou toho, že tato metoda nezachovává celkovou energii systému.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.82\textwidth]{vs}
+	\caption*{explixitní Euler vs automatická metoda v NDSolve}  
+\end{figure}
+\\
+\\
+První integrál rovnice ~\eqref{eq:4} je ve tvaru
+\begin{equation}
+	\frac{1}{2}
+	\left(
+	\dd{\theta}{t}
+	\right)^2
+	-
+	\frac{g}{l}
+	\cos \theta
+	=
+	E
+	.
+\end{equation}
+Neboli podél řešení rovnice ~\eqref{eq:4} musí být první interál roven konstantě E, což je celková mechanická energie systému.
+Pro explicitní Eulerovu metodu to ovšem neplatí. Například pro $\theta_{0} =2\pi/3$ by mělo být podél celého řešení $E=4.905$, ale Eulerova metoda dává pro zvyšující se čas větší hodnoty E:
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.72\textwidth]{energie}
+	\caption*{Eulerova metoda a energie}  
+\end{figure}
+\\
+\\
+Nezachovávání energie explicitní Eulerovou metoděou si můžeme znázornit i trajektorií ve vektorovém poli ${\left\lbrace \theta[t],\dd{\theta}{t}[t]\right\rbrace }$. Na levém obrázku je výpočet pro $\theta_{0}=\pi/2$, kde se v Eulerově metodě automaticky používá minimální velikost počátečního kroku. Během každé periody (což odpovídá jednomu oběhu na obrázku) se energie pomalu zvyšuje a na obrázku se tak po několika periodách křivka zhušťuje. Abychom to viděli zřetelněji, volme Eulerovu metodu opět s $\theta_{0}=\pi/2$, ale nyní s námi zvolenou hodnotou počátečnío kroku např. $ StartingStepSize -> 1/99 $, tím se zvýší nepřesnost, systém začne nabírat energii rychleji a výchylka se začne patrně zvětšovat (pravý obrázek).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.72\textwidth]{pole1}
+	\caption*{\textit{Nalevo:} automaticky zabudovaná Eulerova metoda}  \textit{Napravo:} Eulerova metoda s $StartingStepSize -> 1/99$  
+\end{figure}
+
+\clearpage
+\subsection{Rungeova-Kuttova metoda}
+\label{sec:Rungeova-Kuttova metoda}
+
+Rungeova-Kuttova metoda je jednokroková metoda pro numerické řešení obyčejných diferenciálních rovnic. Pro rovnici ve tvaru \( y'= f(t,y)\) s okrajovou podmínkou \(y(t_0)=y_0 \), vhodně zvolený krok \(b>0\) a \(n = 0, 1, 2, 3, ...\) , je $n+1$ krok metody definován následovně.
+\begin{align*}
+y_{n+1} &= y_n + \frac{1}{6} (k_1 + 2k_2 +2k_3 +k_4) \\
+t_{n+1} &= t_n +h \\ \\
+k_1 &= h f(t_n,y_n) \\
+k_2 &= h f\Big(t_n + \frac{h}{2},y_n + \frac{k_1}{2}\Big) \\
+k_3 &= h f\Big(t_n + \frac{h}{2},y_n + \frac{k_2}{2}\Big) \\
+k_4 &= h f(t_n + h ,y_n + k_3) 
+\end{align*}
+
+\subsubsection{Aproximace periody}
+\label{sec:aprox-periody}
+V následujícím jsme použily program $Mathematica$ k nalezení numerické aproximace periody kyvadla v závislosti na počáteční podmínce.
+V první části kódu jsme si zadefinovaly funkci:
+\begin{verbatim}
+Period[\[Theta]_{0}_] := (time := 0; 
+NDSolve[{\[Theta]''[t] + g/l Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0, 
+ WhenEvent[\[Theta][t] == 0, {time = t, "StopIntegration"}]}, \[Theta], {t, 0, 3 },
+ Method -> "ExplicitRungeKutta"];
+4*time)
+\end{verbatim}
+Která na vstupu přijímá počáteční výchylku kyvadla a obratem nám vrací periodu kmitu. Pro naše potřeby jsme uvažovali tyto hodnoty konstant: $g=9.81, l=1$.\\
+Poté si stačilo nechat příkazem \verb|Table[]| s použitím naší funkce vytvořit tabulku hodnot (1). Následně jsme hodnoty metodou nejmenšího čtverce proložily polynomem a ten, společně s diskrétními hodnotami, vykreslily do grafu (2). 
+
+\begin{minipage}{\textwidth}
+\begin{minipage}[b]{0.2\textwidth}
+\centering
+\begin{tabular}{|c|c|}
+\hline
+$\theta_{0}$ & T \\ 
+\hline
+0.001& 2.00607\\0.101& 2.00735\\0.201& 2.01114\\0.301& 2.01749\\0.401& 2.02642\\0.501& 2.038\\0.601& 2.05231\\0.701& 2.06947\\0.801& 2.0896\\0.901& 2.11285\\1.001& 2.13942
+\\1.101& 2.16953\\1.201& 2.20344\\1.301& 2.24148\\1.401& 2.28401\\1.501& 2.33149\\
+\hline
+\end{tabular}
+\captionof*{table}{}
+\end{minipage}
+\begin{minipage}[b]{0.79\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{Runge - Kutta, Perioda}
+\captionof*{figure}{}
+\end{minipage}
+\hfill
+\end{minipage}
+
+\clearpage
+\subsubsection{Energie systému}
+\label{sec:sys-energy}
+\begin{wrapfigure}{r}{5cm}
+\includegraphics[width=3.5cm]{Runge - Kutta, Fazovy diagram}
+\caption*{Fázový diagram.}
+\end{wrapfigure}
+V této sekci zkoumáme jak dobře explicitní Rungeova-Kuttova metoda zachovává celkovou energii systému. Konkrétně se budeme zabývat počáteční podmínkou: $\theta_{0} = \pi /2$. První z vizualizací bude tzv. fázový diagram, což je parametrický graf vývoje celkové energie v čase. Na grafech tohoto typu lze velmi přímočaře identifikovat co se s energií děje. Pokud graf vypadá jako spirála, která se v čase vyvijí směrem dovnitř/ven tak celková energie systému klesá/stoupá, ale pokud se jedná o uzavřenou křivku, tak je celková energie konstatní.\\
+Pro vykreslení diagramu bylo potřeba si rovnici ~\eqref{eq:1} převést na systém rovnic prvního řádu a následně ho numericky vyřešit pro funkce \verb|x[t]|a \verb|y[t]|. Kde funkce x reprezentuje funkci $\theta [t]$ a funkce y její první derivaci (rychlost) $\theta' [t]$. Příslušný kód v Mathematice vypadá následovně:
+\begin{verbatim}
+system := NDSolve[{x'[t] == y[t], y'[t] == -g/l Sin[x[t]], x[0] == Pi/2,
+ y[0] == 0}, {x[t], y[t]}, {t, 0, 10}, Method -> "ExplicitRungeKutta"]
+\end{verbatim}
+Plod naši snahy můžete nahlédnou na obrázku (3), kde nám vyšel fázový diagram uzavřený. Což znamená, že na první pohled je Rungeova-Kuttova metoda dobrá v zachovávání celkové energie.\\ \\
+K tomu jak moc dobrá v tomto metoda je, nám pomůže druhá vizualizace, kterou bude graf hodnoty celkové energie v čase. Celkovou energii získáme sečtením energie kinetické a potenciální, což v našem případě konkrétně vypadá následovně: $E = \frac{1}{2} (\theta')^2 - \frac{g}{l} cos \theta$. Takže stačí Rungeovo-Kuttovou metodou získat funkci $\theta[t]$, tu dosadit do výrazu pro $E[t]$ a funkci energie si nechat vykreslit v čase. Pro náš případ je výsledkem graf (4), z kterého jde vidět, že celková energie je skoro konstantní až na výkyvy v řádu $\pm 0.0004$.
+
+\begin{figure}[h]
+\begin{flushleft}
+\includegraphics[width=0.65\textwidth]{Runge - Kutta, Energie}
+\caption*{Celková energie v čase}
+\end{flushleft}
+\end{figure}
+
+
+\addtocontents{toc}{\protect\end{multicols}}
+\end{document}
