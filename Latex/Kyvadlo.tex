@@ -361,7 +361,8 @@
 			\hfill
 		\end{minipage}
 		\section{Numerický výpočet}
-		Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Programy, jako například \textit{Wolfram Mathematica}, který zde budeme využívat, umožňují rychlé nalezení numerického řešení diferenciálních rovnic a to pomocí hned několika numerických metod s nastavitelnými parametry.\
+		Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Programy, jako například \textit{Wolfram Mathematica}, který zde budeme využívat, ovšem umožňují rychlé nalezení numerického řešení a to hned pomocí několika numerických metod s nastavitelnými parametry.\
+		\\
 		\\
 		Stěžejní příkaz pro výpočet numerického řešení naší diferenciální rovnice ~\eqref{eq:4} v softwaru \textit{Wolfram Mathematica} bude:
 		\begin{verbatim}
@@ -369,43 +370,63 @@
 				\[Theta]'[0] == 0}, \[Theta], {t,0,n}]
 		\end{verbatim}
 		Přičemž po celý dokument budeme ve výpočtech uvažovat délku kyvadla $ l=1 $ a gravitační zrychlení $ g=9.81 $.
+		\\
+		\\
+		Hlavním cílem bude příkazem \textit{NDSolve} numericky určit periodu kmitů systému popsaného rovnicí ~\eqref{eq:4}, zjistit numericé řešení rovnice ~\eqref{eq:4} a prozkoumat její zachovávání/nezachovávání celkové mechanické energie během děje a všechny tyto body porovnat s reálným chováním matematického kyvadla. Výpočty budeme provádět postupně pomocí: explicitní Eulerovy metody, Rungeovy-Kuttovy metody a Symplektické Rungeovy-Kuttovy metody
 		\subsection{Explicitní Eulerova metoda}
 		Explicitní Eulerova metoda je jedna z jednodušších, ale ukážeme si, že také jedna z nejméně spolehlivých.
 		\\
-		\subsubsection{Princip explicitní Eulerovy metody} Mějme diferenciální rovnici $\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$ s počátečními podmínkami v čase $t_{0}=0$: $\theta(t_{0})=\theta_{0},\; \dd{\theta}{t}(t_{0})=0$. Pak řešení v čase $t_{i}=i\Delta t,\; i=1,...,n$ (zde ve vysvětlení principu předpokládáme pro zjednodušení rovnoměrné dělení a tedy $ \Delta t$ je časový krok metody) získáme ze soustavy rovnic: 
+		\subsubsection{Princip explicitní Eulerovy metody.} Mějme diferenciální rovnici $\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$ s počátečními podmínkami v čase $t_{0}=0$: $\theta(t_{0})=\theta_{0},\; \dd{\theta}{t}(t_{0})=0$. Pak řešení v čase $t_{i}=i\Delta t,\; i=1,...,n$ (zde ve vysvětlení principu předpokládáme pro zjednodušení rovnoměrné dělení a tedy $ \Delta t$ je časový krok metody) získáme ze soustavy rovnic: 
 		\begin{align}
 			\theta_{i+1}& =\theta_{i}+v_{i}\Delta t\\
 			v_{i+1}& =v_{i}-\frac{g}{l}\sin\theta_{i}\Delta t
 		\end{align}
 		, kde $ v_{i}=\dd{\theta_{i}}{t},\; \theta_{i}=\theta(t_{i}),\;\theta_{i+1}=\theta(t_{i+1}),\;v_{i}=v(t_{i}),\;v_{i+1}=v(t_{i+1})$
 		\\
-		\\
-		\textit{Výpočet periody:} Nejdříve zkoumejme periodu T, kterou získáme jako 4krát dobu, za kterou se dostane kyvadlo z úhlu $\theta_{0}$ (počáteční výchylky) do úhlu $\theta=0$. 
+		\subsubsection{Aproximace periody.} Nejdříve zkoumejme periodu T, kterou získáme jako 4krát dobu, za kterou se dostane kyvadlo z úhlu $\theta_{0}$ (počáteční výchylky) do úhlu $\theta=0$. 
 		\\
 		O takovýto výstup můžeme požádat \textit{Mathematicu} ve tvaru:  
 		\begin{verbatim}
 			NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0, 
-				WhenEvent[\[Theta][t] == 0, {Print[t*4], "StopIntegration"}]}, \[Theta], {t, 0, n }]
+				WhenEvent[\[Theta][t] == 0, {Print[t*4], "StopIntegration"}]}, 
+					\[Theta], {t, 0, n,}, Method -> "ExplicitEuler"]
 		\end{verbatim}
-		Důležitá vlastností matematického kyvadla je závislost periody T na počáteční výchylce $\theta_{0}$
+		Důležitou vlastností matematického kyvadla je závislost periody T na počáteční výchylce $\theta_{0}$, tuto závislost ukazuje Graf 2.
 		\begin{figure}[h]
 			\centering
-			\includegraphics[width=0.4\textwidth]{graf1}
-			\caption*{\textbf{Graf 2.} Závislost T na $\theta_{0}$}  
+			\includegraphics[width=0.8\textwidth]{graf1}
+			\caption*{\textbf{Graf 2.} Závislost T na $\theta_{0}$ pro různé metody výpočtu}  
 		\end{figure}
 		\\
-		V tomto případě jsou data získaná explicitní Eulerovou metodou velmi podobná jako výsledky řešení periody pomocí eliptického integrálu. To je dáno tím, že numerické řešení pomocí explicitní Eulerovy metody se s přesných řešením rozbíhá až pro vyšší časy. Výsledky analytické aproximace z rovnice ~\eqref{eq:20} už se ale velmi liší.
+		Tečky, které jsme proložily polynomem, znázorňují hodnotu periody získané pomocí Eulerovy metody. Tyto data jsme porovnali s analityckou aproximací pomocí rovnice ~\eqref{eq:20} do 4. řádu a s výpočtem periody přes eliptický integrál, který by měl dávat přesné hodnoty.
+		V tomto případě se zdá být explicitní Eulerova metoda velmi přesná. To je dáno tím, že numerické řešení pomocí explicitní Eulerovy metody se s přesných řešením rozbíhá až pro vyšší časy. Zatímco výsledky analytické aproximace jsou pro větší počáteční výchylky už i v malých časech poměrně nedostatečné.
 		\\
 		\\
-		Na následujícím grafu je vykreslené řešení pomocí explixitní Eulerovy metody, které se zvyšujícím se časem začíná předbíhat řešení pomocí automatické metody příkazu NDSolve. Lze také vidět, že u řešení explicitní Eulerovou metodou se zvětšuje výchylka, což je příčinou toho, že tato metoda nezachovává celkovou energii systému.
+		\subsubsection{Řešení rovnice \textit{$\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$}.}Na grafu 3 je znázorněno řešení pohybu kyvadla vychýleného z počáteční výchylky $\theta_{0}=2\pi/3$. Modré řešení je výpočet pomocí Eulerovy metody: 
+		\begin{verbatim}
+		euler = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0,  
+				\[Theta], {t, 0, n,}, Method -> "ExplicitEuler"]
+		\end{verbatim}
+		zároveň je zde oranžově vykresleno i řešení pomocí příkazu NDSolve, kde ale \textit{Mathematica} vybere takovou numerickou metodu, aby bylo řešení co nejpřesnější a pro nás tedy teď bude dostatečně dobrou aproximací přesných kmitů kyvadla v závisloti na čase. 
+		\\
+		Příkaz kterým toho dosáhneme zní:
+		\begin{verbatim}
+		auto = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, 	\[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0,  
+				\[Theta], {t, 0, n,}]
+		\end{verbatim}	
+		Abychom tyto metody mohli porovnat, dáme je do jednoho grafu příkazem:
+		\begin{verbatim}
+		Plot[Evaluate[{\[Theta][t] /. euler, \[Theta][t] /. auto}], {t, 0, 100}, PlotRange -> All]
+		\end{verbatim}	
+		Z grafu je patrné, že Eulerova metoda pro zvyšující se \textit{t} začíná předbíhat druhé řešení a zároveň se u  této metody zvyšuje amplituda. Důvodem je v tomto případě neschopnost Eulerovy metody zachovávat celkovou mechanickou energii systému, což si ukážeme ještě lépe za chvíli.
 		\begin{figure}[h]
 			\centering
-			\includegraphics[width=0.82\textwidth]{vs}
-			\caption*{\textbf{Graf 3.} explixitní Euler vs automatická metoda v NDSolve}  
+			\includegraphics[width=0.9\textwidth]{vs}
+			\caption*{\textbf{Graf 3.} explicitní Euler vs automatická metoda v NDSolve}  
 		\end{figure}
 		\\
 		\\
-		První integrál rovnice ~\eqref{eq:4} je ve tvaru
+		\subsubsection{Energie sysému.} První integrál rovnice ~\eqref{eq:4} je ve tvaru
 		\begin{equation}
 			\frac{1}{2}
 			\left(
@@ -418,16 +439,35 @@
 			E
 			.
 		\end{equation}
-		Neboli podél řešení rovnice ~\eqref{eq:4} musí být první interál roven konstantě E, což je celková mechanická energie systému.
-		Pro explicitní Eulerovu metodu to ovšem neplatí. Například pro $\theta_{0} =2\pi/3$ by mělo být podél celého řešení $E=4.905$, ale Eulerova metoda dává pro zvyšující se čas větší hodnoty E:
+		Což říká, že podél řešení je první integrál roven konstantě E, neboli součtu kinetické a potenciální energie, tedy dohromady celkové mechanické energii systému.
+		\\
+		Pro explicitní Eulerovu metodu tato rovnost ovšem neplatí. Volme například $\theta_{0} =2\pi/3$. Pro tuto počáteční výchylku by se měla zachovávat podél celého řešení celková energie $E=4.905$. Eulerova metoda ale konstantní hodnotu E nezachovává, naopak s rostoucím časem energii čím dál víc zvyšuje.
+		\\
+		Graf se dá vykreslit serií přikazů:
+		\begin{verbatim}
+		p1 = Plot[Evaluate[{((\[Theta]'[t])^2)/2 - (g/l) Cos[\[Theta][t]]} /. v], {t,0,80}, 
+		PlotStyle -> Red, PlotRange -> All];
+		p2 = Plot[Evaluate[-g/l *Cos[\[Theta]_{0}]], {t,0,80}, PlotRange -> All];
+		Show[p1, p2, PlotRange -> All]
+		\end{verbatim}
+	, kde za \textit{v} dosadíme získané numerické řešení pomocí Eulerovy metody.
 		\begin{figure}[h]
 			\centering
 			\includegraphics[width=0.72\textwidth]{energie}
-			\caption*{\textbf{Graf 4.} Eulerova metoda a energie}  
+			\caption*{\textbf{Graf 4.} Energie v závislosti na čase pro Eulerovu metodu.}  
 		\end{figure}
 		\\
+		Jak moc Eulerova metoda nezachovává celkovou energie systému lze vidět z trajektorie ve vektorovém poli ${\left\lbrace \theta[t],\dd{\theta}{t}[t]\right\rbrace }$.\
 		\\
-		Nezachovávání energie explicitní Eulerovou metoděou si můžeme znázornit i trajektorií ve vektorovém poli ${\left\lbrace \theta[t],\dd{\theta}{t}[t]\right\rbrace }$. Na levém obrázku je výpočet pro $\theta_{0}=\pi/2$, kde se v Eulerově metodě automaticky používá minimální velikost počátečního kroku. Během každé periody (což odpovídá jednomu oběhu na obrázku) se energie pomalu zvyšuje a na obrázku se tak po několika periodách křivka zhušťuje. Abychom to viděli zřetelněji, volme Eulerovu metodu opět s $\theta_{0}=\pi/2$, ale nyní s námi zvolenou hodnotou počátečnío kroku např. $ StartingStepSize -> 1/99 $, tím se zvýší nepřesnost, systém začne nabírat energii rychleji a výchylka se začne patrně zvětšovat (pravý obrázek).
+		\\
+		Na levém obrázku je výpočet s počáteční výchylkou $\theta_{0}=\pi/2$, kde \textit{Mathematice} přikážeme počítat Eulerovou metodou, ale nenastavíme žádné další upřesňující detaily. \textit{Mathematica} tedy sice bude počítat s obecně málo přesnou Eulerovou metodou, ale automaticky si nastaví takové parametry, aby byl výpočet co nejpřesnější.
+		\\
+		Během každé periody (což odpovídá jednomu oběhu ve vetorovém poli ${\left\lbrace \theta[t],\dd{\theta}{t}[t]\right\rbrace }$.) se energie pomalu zvyšuje a křivka se tak v průběhu oběhu zvětšuje. Tím pádem se ale v bodě $\left\lbrace \pi/2,0\right\rbrace $ křivka neuzavře a postupně po několika periodách vykreslí spirálu a protože se pro tento systém energie v průběhu děje zvyšuje, bude spirála pokračovvat směrem ven (výchylka kmitů se bude zvyšovat). 
+		\\
+		Jelikož ale toto řešení není až tak nedostatečně nepřesné, vidíme místo spirály zhušťující se křivku.
+		\\
+		\\
+		Na pravém obrázku \textit{Mathematice} přikážeme, aby Eulerovu metodu počítala s počátečním krokem 1/99 (za metodu v příkazu NDSolve přidáme: S$ tartingStepSize -> 1/99 $). Tím se zvýší nepřesnost výpočtu a systém začne nabírat energii zřetelně rychleji.
 		\begin{figure}[h]
 			\centering
 			\includegraphics[width=0.72\textwidth]{pole1}
