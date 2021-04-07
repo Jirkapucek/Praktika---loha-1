@@ -34,7 +34,7 @@
 \section{Úvod}
 \label{sec:Úvod}
 
-V tomto dokukmentu budeme zkoumat pohyb matematického kyvadla. Jehož dynamický systém je ukázkovým příkladem systému s periodickým pohybem. Hlavním předmětem zkoumání je, jak se mění chování numerického řešení vůči aproximaci analytického řešení za použití různých numerických metod.
+V tomto dokukmentu budeme zkoumat pohyb matematického kyvadla, jehož dynamický systém je ukázkovým příkladem systému s periodickým pohybem. Hlavním předmětem zkoumání je, jak se mění chování numerického řešení vůči aproximaci analytického řešení za použití různých numerických metod.
 
 \section{Fyzikální kontext}
 \label{sec:Fyzikální kontext}
@@ -367,11 +367,19 @@ $\theta_{0}$ & T \\
 \end{minipage}
 
 \section{Numerický výpočet}
-Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Proto se nyní budeme zabývat numerickým řešením v programu Wolfram Mathematica (příkaz NDSolve), kde existuje několik numerických metod na výpočet řešení diferenciálních rovnic.
-\subsection{Explicitní Eulerova metoda}
-Explicitní Eulerova metoda je jedna z nejjednodušších, avšak také jedna z nejméně spolehlivých.
+Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Programy, jako například \textit{Wolfram Mathematica}, který zde budeme využívat, umožňují rychlé nalezení numerického řešení diferenciálních rovnic a to pomocí hned několika numerických metod s nastavitelnými parametry.\
 \\
-\textit{Princip explicitní Eulerovy metody:} Mějme diferenciální rovnici $\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$ s počátečními podmínkami v čase $t_{0}=0$: $\theta(t_{0})=\theta_{0},\; \dd{\theta}{t}(t_{0})=0$. Pak řešení v čase $t_{i}=i\Delta t,\; i=1,...,n$ (zde ve vysvětlení principu pro zjednodušení předpokládejme rovnoměrné dělení a tedy $ \Delta t$ je časový krok metody) získáme ze soustavy rovnic: 
+Stěžejní příkaz pro výpočet numerického řešení naší diferenciální rovnice ~\eqref{eq:4} v softwaru \textit{Wolfram Mathematica} bude:
+\begin{verbatim}
+NDSolve[{\[Theta]''[t] + (g/l)*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, 
+	\[Theta]'[0] == 0}, \[Theta], {t,0,n}]
+\end{verbatim}
+Přičemž po celý dokument budeme ve výpočtech uvažovat délku kyvadla $ l=1 $ a gravitační zrychlení $ g=9.81 $.
+
+\subsection{Explicitní Eulerova metoda}
+Explicitní Eulerova metoda je jedna z jednodušších, ale ukážeme si, že také jedna z nejméně spolehlivých.
+\\
+\subsubsection{Princip explicitní Eulerovy metody} Mějme diferenciální rovnici $\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$ s počátečními podmínkami v čase $t_{0}=0$: $\theta(t_{0})=\theta_{0},\; \dd{\theta}{t}(t_{0})=0$. Pak řešení v čase $t_{i}=i\Delta t,\; i=1,...,n$ (zde ve vysvětlení principu předpokládáme pro zjednodušení rovnoměrné dělení a tedy $ \Delta t$ je časový krok metody) získáme ze soustavy rovnic: 
 \begin{align}
 	\theta_{i+1}& =\theta_{i}+v_{i}\Delta t\\
 	v_{i+1}& =v_{i}-\frac{g}{l}\sin\theta_{i}\Delta t
@@ -380,7 +388,14 @@ Explicitní Eulerova metoda je jedna z nejjednodušších, avšak také jedna z 
 , kde $ v_{i}=\dd{\theta_{i}}{t},\; \theta_{i}=\theta(t_{i}),\;\theta_{i+1}=\theta(t_{i+1}),\;v_{i}=v(t_{i}),\;v_{i+1}=v(t_{i+1})$
 \\
 \\
-\textit{Výpočet periody:} Nejdříve zkoumejme periodu T, kterou získáme jako dobu, za kterou se dostane kyvadlo z úhlu $\theta_{0}$ (počáteční výchylky) do úhlu $\theta=0$. Vykresleme si graf, který ukazuje závislost periody na počáteční výchylce pro různé metody výpočtu.
+\textit{Výpočet periody:} Nejdříve zkoumejme periodu T, kterou získáme jako 4krát dobu, za kterou se dostane kyvadlo z úhlu $\theta_{0}$ (počáteční výchylky) do úhlu $\theta=0$. 
+\\
+O takovýto výstup můžeme požádat \textit{Mathematicu} ve tvaru:  
+\begin{verbatim}
+NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0, 
+	WhenEvent[\[Theta][t] == 0, {Print[t*4], "StopIntegration"}]}, \[Theta], {t, 0, n }]
+\end{verbatim}
+Důležitá vlastností matematického kyvadla je závislost periody T na počáteční výchylce $\theta_{0}$
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.4\textwidth]{graf1}
@@ -427,6 +442,7 @@ Nezachovávání energie explicitní Eulerovou metoděou si můžeme znázornit 
 	\caption*{\textit{Nalevo:} automaticky zabudovaná Eulerova metoda}  \textit{Napravo:} Eulerova metoda s $StartingStepSize -> 1/99$  
 \end{figure}
 
+\clearpage
 \subsection{Rungeova-Kuttova metoda}
 \label{sec:Rungeova-Kuttova metoda}
 
@@ -474,8 +490,8 @@ $\theta_{0}$ & T \\
 \end{minipage}
 \hfill
 \end{minipage}
-\clearpage
 
+\clearpage
 \subsubsection{Energie systému}
 \label{sec:sys-energy}
 \begin{wrapfigure}{r}{5cm}
