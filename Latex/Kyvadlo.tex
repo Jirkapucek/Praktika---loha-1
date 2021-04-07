@@ -331,7 +331,43 @@ where we have used the fact that $\sin \alpha \approx \alpha$ and $\frac{1}{\sqr
   \right)
   .
 \end{equation}
-\\
+
+Nebo si integrál můžeme přepsat do programu $Mathematica$, který vnímá eliptický integrál jako speciální funkci a může ho bezpracně rozvinou až do libovolného členu: 
+
+\begin{equation*}
+  T
+  \approx
+ 2 \pi \sqrt{\frac{l}{g}} \bigg(  1 +\frac{1}{16}\thetainit ^2+\frac{11}{3072}\thetainit ^4+\frac{173}{737280} \thetainit ^6 +\frac{22931}{1321205760} \thetainit ^8 
++\frac{1319183}{951268147200} \thetainit ^{10} \bigg)
+\end{equation*}
+
+Do inetgrálu také můžeme dosadit konkrétní hodnoty a dostat dosti přesnou hodnotu periody v závislosti na čase. Výsledkem jsou diskrétní hodnoty periody, viz. tabulka (1), které jsme následně proložily polynomem (metoda nejmenších čtverců), viz. graf (2). 
+
+\vspace{5mm}
+
+\begin{minipage}{\textwidth}
+\begin{minipage}[b]{0.2\textwidth}
+\centering
+\begin{tabular}{|c|c|}
+\hline
+$\theta_{init}$ & T \\ 
+\hline
+0.001& 2.00607\\0.101& 2.00735\\0.201& 2.01114\\0.301& 2.01749\\0.401& 2.02642\\0.501& 2.038\\0.601& 2.05231\\0.701& 2.06947\\0.801& 2.08959\\0.901& 2.11284\\
+1.001& 2.13938\\1.101& 2.16945\\1.201& 2.20327\\1.301& 2.24115\\1.401& 2.28339\\1.501& 2.33039\\
+\hline
+\end{tabular}
+\captionof{table}{}
+\end{minipage}
+\begin{minipage}[b]{0.79\textwidth}
+\centering
+\includegraphics[width=0.8\textwidth]{Elipticky integral, Perioda}
+\captionof{figure}{}
+\end{minipage}
+\hfill
+\end{minipage}
+
+
+\clearpage
 \section{Numerický výpočet}
 Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Proto se nyní budeme zabývat numerickým řešením v programu Wolfram Mathematica (příkaz NDSolve), kde existuje několik numerických metod na výpočet řešení diferenciálních rovnic.
 \subsection{Explicitní Eulerova metoda}
