@@ -339,7 +339,9 @@
 			+\frac{1319183}{951268147200} \theta_{0} ^{10} \bigg)
 		\end{equation*}
 		Do inetgrálu také můžeme dosadit konkrétní hodnoty a dostat dosti přesnou hodnotu periody v závislosti na čase. Výsledkem jsou diskrétní hodnoty periody, viz. tabulka (1), které jsme následně proložily polynomem (metoda nejmenších čtverců), viz. graf (1). 
+
 		\vspace{5mm}
+
 		\begin{minipage}{\textwidth}
 			\begin{minipage}[b]{0.25\textwidth}
 				\centering
@@ -360,9 +362,9 @@
 			\end{minipage}
 			\hfill
 		\end{minipage}
-			Navíc z fyzikální představy víme, že pro $\theta_{0}=\frac{\pi}{2}$ se kyvadlo nahází ve stabilní poloze vratké, ve které se bylo mělo nacházet s periodou oscilace rovnu nekonečno za předpokladu, že na kyvadlo nepůsobí žádné vnější síly, což je systém popsaný právě~\eqref{eq:4}.
+			Navíc z fyzikální představy víme, že pro $\theta_{0}=\pi$ se kyvadlo nahází ve stabilní poloze vratké, ve které se bylo mělo nacházet s periodou oscilace rovnu nekonečno za předpokladu, že na kyvadlo nepůsobí žádné vnější síly, což je systém popsaný právě~\eqref{eq:4}.
 \\
-Dalo by se tedy předpokládat, že pro $\theta_{0} \longrightarrow \frac{\pi}{2}$ se dá očekávat, že $T\longrightarrow \infty $.
+Dalo by se tedy předpokládat, že pro $\theta_{0} \longrightarrow \pi$ se dá očekávat, že $T\longrightarrow \infty $.
 		\section{Numerický výpočet}
 		Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Programy, jako například \textit{Wolfram Mathematica}, který zde budeme využívat, ovšem umožňují rychlé nalezení numerického řešení a to hned pomocí několika numerických metod s nastavitelnými parametry.\
 		\\
@@ -407,15 +409,15 @@ Dalo by se tedy předpokládat, že pro $\theta_{0} \longrightarrow \frac{\pi}{2
 		\\
 		\subsubsection{Řešení rovnice \textit{$\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$}.}Na grafu 3 je znázorněno řešení pohybu kyvadla vychýleného z počáteční výchylky $\theta_{0}=2\pi/3$. Modré řešení je výpočet pomocí Eulerovy metody: 
 		\begin{verbatim}
-		euler = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0,  
-				\[Theta], {t, 0, n,}, Method -> "ExplicitEuler"]
+		euler = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, 
+\[Theta]'[0] == 0,  \[Theta], {t, 0, n,}, Method -> "ExplicitEuler"]
 		\end{verbatim}
 		zároveň je zde oranžově vykresleno i řešení pomocí příkazu NDSolve, kde ale \textit{Mathematica} vybere takovou numerickou metodu, aby bylo řešení co nejpřesnější a pro nás tedy teď bude dostatečně dobrou aproximací přesných kmitů kyvadla v závisloti na čase. 
 		\\
 		Příkaz kterým toho dosáhneme zní:
 		\begin{verbatim}
-		auto = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, 	\[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0,  
-				\[Theta], {t, 0, n,}]
+		auto = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, 	\[Theta][0] == \[Theta]_{0}, 
+\[Theta]'[0] == 0,  \[Theta], {t, 0, n,}]
 		\end{verbatim}	
 		Abychom tyto metody mohli porovnat, dáme je do jednoho grafu příkazem:
 		\begin{verbatim}
@@ -500,7 +502,8 @@ Dalo by se tedy předpokládat, že pro $\theta_{0} \longrightarrow \frac{\pi}{2
 			4*time)
 		\end{verbatim}
 		Která na vstupu přijímá počáteční výchylku kyvadla a obratem nám vrací periodu kmitu. Pro naše potřeby jsme uvažovali tyto hodnoty konstant: $g=9.81, l=1$.\\
-		Poté si stačilo nechat příkazem \verb|Table[]| s použitím naší funkce vytvořit tabulku hodnot (2). Následně jsme hodnoty metodou nejmenšího čtverce proložily polynomem a ten, společně s diskrétními hodnotami, vykreslily do grafu (2)(který?). 
+		Poté si stačilo nechat příkazem \verb|Table[]| s použitím naší funkce vytvořit tabulku hodnot (2). Následně jsme hodnoty metodou nejmenšího čtverce proložily polynomem a ten, společně s diskrétními hodnotami, vykreslily do grafu (5).\\
+
 		\begin{minipage}{\textwidth}
 			\begin{minipage}[b]{0.25\textwidth}
 				\centering
@@ -517,7 +520,7 @@ Dalo by se tedy předpokládat, že pro $\theta_{0} \longrightarrow \frac{\pi}{2
 			\begin{minipage}[b]{0.79\textwidth}
 				\centering
 				\includegraphics[width=0.8\textwidth]{Runge - Kutta, Perioda}
-				\captionof*{figure}{}
+				\captionof*{figure}{\textbf{Graf 5.}}
 			\end{minipage}
 			\hfill
 		\end{minipage}
@@ -534,12 +537,12 @@ Dalo by se tedy předpokládat, že pro $\theta_{0} \longrightarrow \frac{\pi}{2
 			system := NDSolve[{x'[t] == y[t], y'[t] == -g/l Sin[x[t]], x[0] == Pi/2,
 				y[0] == 0}, {x[t], y[t]}, {t, 0, 10}, Method -> "ExplicitRungeKutta"]
 		\end{verbatim}
-		Plod naši snahy můžete nahlédnou na obrázku (2), kde nám vyšel fázový diagram uzavřený. Což znamená, že na první pohled je Rungeova-Kuttova metoda dobrá v zachovávání celkové energie.\\ \\
-		K tomu jak moc dobrá v tomto metoda je, nám pomůže druhá vizualizace, kterou bude graf hodnoty celkové energie v čase. Celkovou energii získáme sečtením energie kinetické a potenciální, což v našem případě konkrétně vypadá následovně: $E = \frac{1}{2} (\theta')^2 - \frac{g}{l} cos \theta$. Takže stačí Rungeovo-Kuttovou metodou získat funkci $\theta[t]$, tu dosadit do výrazu pro $E[t]$ a funkci energie si nechat vykreslit v čase. Pro náš případ je výsledkem graf (8), z kterého jde vidět, že celková energie je skoro konstantní až na výkyvy v řádu $\pm 0.0004$.
+		Plod naši snahy můžete nahlédnou na obrázku (4), kde nám vyšel fázový diagram uzavřený. Což znamená, že na první pohled je Rungeova-Kuttova metoda dobrá v zachovávání celkové energie.\\ \\
+		K tomu jak moc dobrá v tomto metoda je, nám pomůže druhá vizualizace, kterou bude graf hodnoty celkové energie v čase. Celkovou energii získáme sečtením energie kinetické a potenciální, což v našem případě konkrétně vypadá následovně: $E = \frac{1}{2} (\theta')^2 - \frac{g}{l} cos \theta$. Takže stačí Rungeovo-Kuttovou metodou získat funkci $\theta[t]$, tu dosadit do výrazu pro $E[t]$ a funkci energie si nechat vykreslit v čase. Pro náš případ je výsledkem graf (6), z kterého jde vidět, že celková energie je skoro konstantní až na výkyvy v řádu $\pm 0.0004$.
 		\begin{figure}[h]
 			\begin{flushleft}
 				\includegraphics[width=0.65\textwidth]{Runge - Kutta, Energie}
-				\caption*{\textbf{Graf 7.} Celková energie v čase}
+				\caption*{\textbf{Graf 6.} Celková energie v čase}
 			\end{flushleft}
 		\end{figure}
 		\addtocontents{toc}{\protect\end{multicols}}
