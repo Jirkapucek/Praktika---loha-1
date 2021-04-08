@@ -23,7 +23,7 @@
 \begin{document}
 	
 	\begin{abstract}
-		Zkoumáme řešení rovnici matematického kyvadla pomocí explicitní Eulerovy metody, Runge-Kuttovy metody a
+		Zkoumáme řešení rovnici matematického kyvadla pomocí explicitní Eulerovy metody, Runge-Kuttovy metody a metody korektor-prediktor.
 	\end{abstract}
 	
 	\maketitle
@@ -402,7 +402,7 @@
 		Přičemž po celý dokument budeme ve výpočtech uvažovat délku kyvadla $ l=1 $, $ m=1 $ a gravitační zrychlení $ g=9.81 $.
 		\\
 		\\
-		Hlavním cílem bude příkazem \textit{NDSolve} numericky určit periodu kmitů systému popsaného rovnicí ~\eqref{eq:4}, zjistit numericé řešení rovnice ~\eqref{eq:4}, prozkoumat její zachovávání/nezachovávání celkové mechanické energie během děje a všechny tyto body porovnat s reálným chováním matematického kyvadla. Výpočty budeme provádět postupně pomocí: explicitní Eulerovy metody, Rungeovy-Kuttovy metody a Symplektické Rungeovy-Kuttovy metody
+		Hlavním cílem bude příkazem \textit{NDSolve} numericky určit periodu kmitů systému popsaného rovnicí ~\eqref{eq:4}, zjistit numericé řešení rovnice ~\eqref{eq:4}, prozkoumat její zachovávání/nezachovávání celkové mechanické energie během děje a všechny tyto body porovnat s reálným chováním matematického kyvadla. Výpočty budeme provádět postupně pomocí: explicitní Eulerovy metody, Rungeovy-Kuttovy metody a metody korektor-prediktor.
 		\subsection{Explicitní Eulerova metoda}
 		Explicitní Eulerova metoda je jedna z jednodušších, ale ukážeme si, že také jedna z nejméně spolehlivých.
 		\\
@@ -570,5 +570,36 @@
 					\end{flushleft}
 				\end{figure}
 				\addtocontents{toc}{\protect\end{multicols}}
-			\subsection{Metoda korektor prediktor}
+			\subsection{Metoda korektor-prediktor}
+			\label{sec:Metoda korektor-prediktor}
+			Korektor-prediktor je jedna z mnohokrokové metod. Pracuje se vždy s dvojicí metod přičemž máme jednu explicitní metodu a druhou implicitní. V prvním kroku se využije vybrané explicitní metody "prediktoru" a získáme prvnotní odhad nového řešení. Námi získaný odhad se použije jako start iteračního procesu, který řeší námi zvolená implicitní metoda "korektor". Postupným iterováním získáváme přesnější odhad. Nutno ještě podotknout, že metodu korektor-prediktor, kterou budeme využívat pro $ Wolfram Mathematica $, se jmenuje Adamsova.
+			\subsubsection{Aproximace periody}
+			Postupujeme identicky jako v předešlých případech přepsáním již použitých metod na "Adams", ovšem očekáváme ještě přesnější výsledky než u Runge-Kuttovy metody, kde jsme mohli vidět z grafu (6), že chyba byla řádově $10^{-4}$. Veliká přesnost je dána tím, že se jedná o vícekrokovou metodu narozdíl od předcházejících.
+			\\
+			\begin{minipage}{\textwidth}
+				\begin{minipage}[b]{0.25\textwidth}
+					\centering
+					\begin{tabular}{|c|c|}
+						\hline
+						$\theta_{0}$ & T \\ 
+						\hline
+						0.001& 2.00605\\0.101& 2.00735\\0.201& 2.01114\\0.301& 2.01749\\0.401& 2.02642\\0.501& 2.038\\0.601& 2.05231\\0.701& 2.06947\\0.801& 2.0896\\0.901& 2.11285\\1.001& 2.13942
+						\\1.101& 2.16953\\1.201& 2.20344\\1.301& 2.24148\\1.401& 2.28401\\1.501& 2.33149\\
+						\hline
+					\end{tabular}
+					\captionof*{table}{\textbf{Tabulka 4.}}
+				\end{minipage}
+			\begin{minipage}[b]{0.79\textwidth}
+				\centering
+				\includegraphics[width=0.8\textwidth]{Runge - Kutta, Perioda}
+				\captionof*{figure}{\textbf{Graf 7.}}
+			\end{minipage}
+			\hfill
+		\end{minipage}
+	\\
+	Jak můžeme vidět z grafu (7), rozdíl mezi Runge-Kuttou a Adamsem je okem nerozpoznatelný a rozdíl mezi tabulkamy je jen v prvním členu.
+	\subsubsection{Energie systému}
+	
+	
+	
 			\end{document}
