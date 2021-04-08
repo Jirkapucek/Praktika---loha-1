@@ -97,8 +97,8 @@
 		\end{equation}
 		kde $a$, $b \in R$ jsou reálné konstanty a navíc díky symetrii problému řada nemá liché členy.
 		
-		\subsection{Přímý výpočet pomocí aproximace eliptického integrálu}
-		\label{Přímý výpočet pomocí aproximace eliptického integrálu}
+		\subsection{Přímý výpočet přes eliptický integrál}
+		\label{Přímý výpočet přes eliptický integrál}
 		
 		
 		Vynásobením rovnice~\eqref{eq:4} členem $\dd{\theta}{t}$ a následnou úpravou dostáváme
@@ -606,7 +606,26 @@
 				\\
 				Jak můžeme vidět z grafu (7), rozdíl mezi Runge-Kuttou a Adamsem je okem nerozpoznatelný a rozdíl mezi tabulkamy je jen v prvním členu.
 				\subsubsection{Energie systému}
+				Jak jsme již naznačili, naše očekávání je, že korektor-prediktor bude přesnější, než předchozí metody. Vskutku, když se podíváme na graf (8), vidíme, že metoda má tendenci snižovat energii systému, ovšem je nutno podotknout, že na takový odchyl bylo potřeba zvolit $t=1 000$ čili značně vysoké.\\
+				\\
 				
+				\begin{minipage}{\textwidth}
+					\begin{minipage}[b]{0.4\textwidth}
+						\centering
+						\includegraphics[width=0.9\textwidth]{adams}
+						\captionof*{figure}{\textbf{Graf 8.}}
+					\end{minipage}
+					\begin{minipage}[b]{0.79\textwidth}
+						\centering
+						\includegraphics[width=0.8\textwidth]{grafik}
+						\captionof*{figure}{\textbf{Obrázek 5.}}
+					\end{minipage}
+					\hfill
+				\end{minipage}
+				Z obrázku (5) pět rovněž můžeme vidět, jak moc je metoda přesná a to s odchylkou $\pm 3*10^{-6}$, čím nám potvrzuje naše předešlá tvrzení týkajících se přesnosti metody.
+				\section{Závěr}
+				\label{sec:Závěr}
+				Závěrem bych chtěli našim váženým čtenářům (tedy panu doktoru Tůmovi a panu doktoru Průšovi), aby tento náš "prvotvor" brali převážně s velkou rezervou, případně s jedním okem přivřeným (nebo možná dvěmi). 
 				
 				\addtocontents{toc}{\protect\end{multicols}}
 		\end{document}
