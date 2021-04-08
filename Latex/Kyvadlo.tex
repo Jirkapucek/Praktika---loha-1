@@ -432,8 +432,8 @@
 		Důležitou vlastností matematického kyvadla je závislost periody T na počáteční výchylce $\theta_{0}$, tuto závislost ukazuje Graf 2.
 		\begin{figure}[h]
 			\centering
-			\includegraphics[width=0.8\textwidth]{graf1}
-			\caption*{\textbf{Graf 2.} Závislost T na $\theta_{0}$ pro různé metody výpočtu}  
+			\includegraphics[width=0.99\textwidth]{graf1}
+			\caption*{\textbf{Graf 2.} Závislost T na $\theta_{0}$ pro různé metody výpočtu.}  
 		\end{figure}
 		\\
 		Tečky, které jsme proložily polynomem, znázorňují hodnotu periody získané pomocí Eulerovy metody. Tyto data jsme porovnali s analityckou aproximací pomocí rovnice ~\eqref{eq:20} do 4. řádu a s výpočtem periody přes eliptický integrál, který by měl dávat přesné hodnoty.
@@ -459,8 +459,8 @@
 				Z grafu je patrné, že Eulerova metoda pro zvyšující se \textit{t} začíná předbíhat druhé řešení a zároveň se u  této metody zvyšuje amplituda. Důvodem je v tomto případě neschopnost Eulerovy metody zachovávat celkovou mechanickou energii systému, což si ukážeme ještě lépe za chvíli.
 				\begin{figure}[h]
 					\centering
-					\includegraphics[width=0.9\textwidth]{vs}
-					\caption*{\textbf{Graf 3.} explicitní Euler vs automatická metoda v NDSolve}  
+					\includegraphics[width=0.99\textwidth]{vs}
+					\caption*{\textbf{Graf 3.} Explicitní Euler vs automatická metoda v NDSolve.}  
 				\end{figure}
 				\\
 				\\
@@ -483,19 +483,17 @@
 				\\
 				Graf se dá vykreslit serií přikazů:
 				\begin{verbatim}
-					p1 = Plot[Evaluate[{((\[Theta]'[t])^2)/2 - (g/l) Cos[\[Theta][t]]} /. v], {t,0,80}, 
+					p1 = Plot[Evaluate[{((\[Theta]'[t])^2)/2 - (g/l) Cos[\[Theta][t]]} /. euler], {t,0,80}, 
 					PlotStyle -> Red, PlotRange -> All];
 					p2 = Plot[Evaluate[-g/l *Cos[\[Theta]_{0}]], {t,0,80}, PlotRange -> All];
 					Show[p1, p2, PlotRange -> All]
 				\end{verbatim}
-				, kde za \textit{v} dosadíme získané numerické řešení pomocí Eulerovy metody.
 				\begin{figure}[h]
 					\centering
 					\includegraphics[width=0.72\textwidth]{energie}
 					\caption*{\textbf{Graf 4.} Energie v závislosti na čase pro Eulerovu metodu.}  
 				\end{figure}
-				\\
-				Jak moc Eulerova metoda nezachovává celkovou energie systému lze vidět z trajektorie ve fázovém prostoru.\
+				Jak moc Eulerova metoda nezachovává celkovou energie systému lze vidět i z trajektorie ve fázovém prostoru.\
 				\\
 				\\
 				Na levém obrázku je výpočet s počáteční výchylkou $\theta_{0}=\pi/2$, kde \textit{Mathematice} přikážeme počítat Eulerovou metodou, ale nenastavíme žádné další upřesňující detaily. \textit{Mathematica} tedy sice bude počítat s obecně málo přesnou Eulerovou metodou, ale automaticky si nastaví takové parametry, aby byl výpočet co nejpřesnější.
@@ -509,7 +507,7 @@
 				\begin{figure}[h]
 					\centering
 					\includegraphics[width=0.72\textwidth]{pole2}
-					\caption*{\textit{Nalevo:} \textbf{Obrázek 2.} automaticky zabudovaná Eulerova metoda}  \textit{Napravo:} \textbf{Obrázek 3.} Eulerova metoda s $StartingStepSize -> 1/99$  
+					\caption*{\textit{Nalevo:} \textbf{Obrázek 2.} Automaticky zabudovaná Eulerova metoda.}  \textit{Napravo:} \textbf{Obrázek 3.} Eulerova metoda s $StartingStepSize -> 1/99$.
 				\end{figure}
 				\clearpage
 				\subsection{Rungeova-Kuttova metoda}
