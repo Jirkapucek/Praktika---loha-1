@@ -343,7 +343,6 @@
 		\end{equation}
 		Do inetgrálu také můžeme dosadit konkrétní hodnoty a dostat dosti přesnou hodnotu periody v závislosti na čase. Výsledkem jsou diskrétní hodnoty periody, viz. tabulka (1), které jsme následně proložily polynomem (metoda nejmenších čtverců), viz. graf (1).\\
 		 
-		\vspace{5mm}
 		\begin{minipage}{\textwidth}
 			\begin{minipage}[b]{0.25\textwidth}
 				\centering
@@ -364,7 +363,7 @@
 			\end{minipage}
 			\hfill
 		\end{minipage}
-	\begin{wraptable}{r}{5.5cm}
+	\begin{wraptable}[12]{r}{4cm}
 		\begin{minipage}{\textwidth}
 			\begin{minipage}[b]{0.25\textwidth}
 				\centering
@@ -377,7 +376,6 @@
 				\end{tabular}
 				\captionof*{table}{\textbf{Tabulka 2.}}
 			\end{minipage}
-			\hfill
 		\end{minipage}
 	\end{wraptable}
 	
@@ -392,14 +390,9 @@
 		
 	\end{verbatim*}
 	kde dosadíme za $ g=9.81, l=1, m=1$  a za x dosazujeme $ \pi $ s námi určenou přesností (v tabulce značení $ 10^{-n} $ znamená přesná hodnota $ \pi $ na n desetinných míst).
-	\\
-	\\
-	\\
-	\\
-	
+Z tabulky vidíme, že námi numerická aproximace i přes stále menší rozdíl hodnot počáteční podmínky perioda oscilace dál roste. \\
+\\
 
-	
-	Z tabulky vidíme, že námi numerická aproximace i přes stále menší rozdíl hodnot počáteční podmínky perioda oscilace dál roste. 
 		\section{Numerický výpočet}
 		Jak již bylo řečeno, je obtížné najít explicitní řešení rovnice ~\eqref{eq:4} ve tvaru elementárních funkcí. Programy, jako například \textit{Wolfram Mathematica}, který zde budeme využívat, ovšem umožňují rychlé nalezení numerického řešení a to hned pomocí několika numerických metod s nastavitelnými parametry.\
 		\\
@@ -440,8 +433,7 @@
 		\\
 		Tečky, které jsme proložily polynomem, znázorňují hodnotu periody získané pomocí Eulerovy metody. Tyto data jsme porovnali s analityckou aproximací pomocí rovnice ~\eqref{eq:20} do 4. řádu a s výpočtem periody přes eliptický integrál, který by měl dávat přesné hodnoty.
 		V tomto případě se zdá být explicitní Eulerova metoda velmi přesná. To je dáno tím, že numerické řešení pomocí explicitní Eulerovy metody se s přesných řešením rozbíhá až pro vyšší časy. Zatímco výsledky analytické aproximace jsou pro větší počáteční výchylky už i v malých časech poměrně nedostatečné.
-		\\
-		\\
+\clearpage
 		\subsubsection{Řešení rovnice \textit{$\ddd{\theta}{t} + \frac{g}{l} \sin \theta = 0$}.}Na grafu 3 je znázorněno řešení pohybu kyvadla vychýleného z počáteční výchylky $\theta_{0}=2\pi/3$. Modré řešení je výpočet pomocí Eulerovy metody: 
 		\begin{verbatim}
 			euler = NDSolve[{\[Theta]''[t] + g/l*Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, 
@@ -515,6 +507,7 @@
 				\subsection{Rungeova-Kuttova metoda}
 				\label{sec:Rungeova-Kuttova metoda}
 				Rungeova-Kuttova metoda je jednokroková metoda pro numerické řešení obyčejných diferenciálních rovnic. Pro rovnici ve tvaru \( y'= f(t,y)\) s okrajovou podmínkou \(y(t_0)=y_0 \), vhodně zvolený krok \(b>0\) a \(n = 0, 1, 2, 3, ...\) , je $n+1$ krok metody definován následovně.
+\vspace{0.5cm}
 				\begin{align*}
 					y_{n+1} &= y_n + \frac{1}{6} (k_1 + 2k_2 +2k_3 +k_4) \\
 					t_{n+1} &= t_n +h \\ \\
@@ -523,19 +516,29 @@
 					k_3 &= h f\Big(t_n + \frac{h}{2},y_n + \frac{k_2}{2}\Big) \\
 					k_4 &= h f(t_n + h ,y_n + k_3) 
 				\end{align*}
+\vspace{0.5cm}
 				\subsubsection{Aproximace periody}
 				\label{sec:aprox-periody}
 				V následujícím jsme použily program $Mathematica$ k nalezení numerické aproximace periody kyvadla v závislosti na počáteční podmínce.
 				V první části kódu jsme si zadefinovaly funkci:
 				\begin{verbatim}
-					Period[\[Theta]_{0}_] := (time := 0; 
-					NDSolve[{\[Theta]''[t] + g/l Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]_{0}, \[Theta]'[0] == 0, 
-						WhenEvent[\[Theta][t] == 0, {time = t, "StopIntegration"}]}, \[Theta], {t, 0, 3 },
-					Method -> "ExplicitRungeKutta"];
-					4*time)
+Period[\[Theta]init_] := (time := 0;
+NDSolve[{\[Theta]''[t] + g/l Sin[\[Theta][t]] == 0, \[Theta][0] == \[Theta]init, \[Theta]'[0] == 0, 
+WhenEvent[\[Theta][t] == 0, {time = t, "StopIntegration"}]}, \[Theta], {t, 0, 3 }, 
+Method -> "ExplicitRungeKutta"];
+4*time)
 				\end{verbatim}
-				Která na vstupu přijímá počáteční výchylku kyvadla a obratem nám vrací periodu kmitu. Pro naše potřeby jsme uvažovali tyto hodnoty konstant: $g=9.81, l=1$.\\
-				Poté si stačilo nechat příkazem \verb|Table[]| s použitím naší funkce vytvořit tabulku hodnot (2). Následně jsme hodnoty metodou nejmenšího čtverce proložily polynomem a ten, společně s diskrétními hodnotami, vykreslily do grafu (5).\\
+				Která na vstupu přijímá počáteční výchylku kyvadla a obratem nám vrací periodu kmitu. Pro naše potřeby jsme uvažovali tyto hodnoty konstant: $g=9.81, l=1$. Následně jsme použily příkaz: 
+\begin{verbatim}
+Tabulka = Table[{\[Theta]init, Period[\[Theta]init]}, {\[Theta]init, 1/1000, Pi/2, 0.1 }]
+\end{verbatim}
+Který do naši funkce vkládá určité hodnoty z intervalu $(0, \pi)$ a zaznamenovává její výstup. Data poté vypíše ve formátu, který lze lehce zpracovat do tabulky (3). Tato diskrétní data si můžeme metodou nejmenšího čtverce převést na polynom, s tím nám pomůže tento příkaz: \verb|fit1 = Fit[ Tabulka, {1, x^2,  x^4, x^6}, x]|. Nakonec si pomocí příkazů \verb|Plot[]| a \verb|Show[]| můžeme diskrétní body a polynom vykreslit do jednoho grafu (5).
+\\
+\\
+\\
+\\
+\\
+\\
 				\begin{minipage}{\textwidth}
 					\begin{minipage}[b]{0.25\textwidth}
 						\centering
@@ -547,7 +550,7 @@
 							\\1.101& 2.16953\\1.201& 2.20344\\1.301& 2.24148\\1.401& 2.28401\\1.501& 2.33149\\
 							\hline
 						\end{tabular}
-						\captionof*{table}{\textbf{Tabulka 2.}}
+						\captionof*{table}{\textbf{Tabulka 3.}}
 					\end{minipage}
 					\begin{minipage}[b]{0.79\textwidth}
 						\centering
