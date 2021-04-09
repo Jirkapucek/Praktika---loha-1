@@ -403,6 +403,8 @@
 		\\
 		\\
 		Hlavním cílem bude příkazem \textit{NDSolve} numericky určit periodu kmitů systému popsaného rovnicí ~\eqref{eq:4}, zjistit numericé řešení rovnice ~\eqref{eq:4}, prozkoumat její zachovávání/nezachovávání celkové mechanické energie během děje a všechny tyto body porovnat s reálným chováním matematického kyvadla. Výpočty budeme provádět postupně pomocí: explicitní Eulerovy metody, Rungeovy-Kuttovy metody a metody korektor-prediktor.
+		\\
+		\\
 		\subsection{Explicitní Eulerova metoda}
 		Explicitní Eulerova metoda je jedna z nejjednodušších a také nejméně spolehlivých.
 		\\
@@ -424,7 +426,7 @@
 		Důležitou vlastností matematického kyvadla je závislost periody T na počáteční výchylce $\theta_{0}$, tuto závislost ukazuje graf (2).
 		\begin{figure}[h]
 			\centering
-			\includegraphics[width=0.99\textwidth]{graf1}
+			\includegraphics[width=1\textwidth]{graf1}
 			\caption*{\textbf{Graf 2.} Závislost T na $\theta_{0}$ pro různé metody výpočtu.}  
 		\end{figure}
 		\\
@@ -449,7 +451,7 @@
 				Z grafu je patrné, že Eulerova metoda pro zvyšující se \textit{t} začíná předbíhat druhé řešení a zároveň se u  této metody zvyšuje amplituda. Důvodem je v tomto případě neschopnost Eulerovy metody zachovávat celkovou mechanickou energii systému, což si ukážeme ještě lépe za chvíli.
 				\begin{figure}[h]
 					\centering
-					\includegraphics[width=0.99\textwidth]{vs}
+					\includegraphics[width=1.05\textwidth]{vs}
 					\caption*{\textbf{Graf 3.} Explicitní Euler vs automatická metoda v NDSolve.}  
 				\end{figure}
 				\\
@@ -488,7 +490,7 @@
 				\\
 				Na levém obrázku je výpočet s počáteční výchylkou $\theta_{0}=\pi/2$, kde \textit{Mathematice} přikážeme počítat Eulerovou metodou, ale nenastavíme žádné další upřesňující detaily. \textit{Mathematica} tedy sice bude počítat s obecně málo přesnou Eulerovou metodou, ale automaticky si nastaví takové parametry, aby byl výpočet co nejpřesnější.
 				\\
-				Během každé periody (což odpovídá jednomu oběhu ve fázovém prostoru) se energie pomalu zvyšuje a křivka se tak v průběhu oběhu zvětšuje. Tím pádem se ale v bodě $\left\lbrace \pi/2,0\right\rbrace $ křivka neuzavře a postupně po několika periodách vykreslí spirálu a protože se pro tento systém energie v průběhu děje zvyšuje, bude spirála pokračovat směrem ven (výchylka kmitů se bude zvyšovat). 
+				Během každé periody (což odpovídá jednomu oběhu ve fázovém prostoru) se energie pomalu zvyšuje a křivka se tak v průběhu oběhu zvětšuje. Tím pádem se ale v bodě $\left\lbrace \pi/2,0\right\rbrace $ neuzavře a postupně po několika periodách vykreslí spirálu a protože se pro tento systém energie v průběhu děje zvyšuje, bude spirála pokračovat směrem ven (výchylka kmitů se bude zvyšovat). 
 				\\
 				Jelikož ale toto řešení není až tak nedostatečně nepřesné, vidíme místo spirály zhušťující se křivku.
 				\\
